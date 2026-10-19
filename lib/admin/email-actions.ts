@@ -3,7 +3,8 @@
 import { revalidatePath } from 'next/cache';
 import { requireSuperAdmin } from '@/lib/auth/dal';
 import { EMAIL_ROUTES, parseAddresses, type EmailRoute } from '@/lib/email/routes';
-import { saveEmailSettings, type RouteSetting } from '@/lib/email/settings';
+import { getEmailSettings, isConfigured, saveEmailSettings, type RouteSetting } from '@/lib/email/settings';
+import { checkConnection, type ConnectionCheck } from '@/lib/email/graph';
 import { sendTestEmail } from '@/lib/email/notify';
 
 export interface EmailFormState {
@@ -43,6 +44,32 @@ export async function saveEmailSettingsAction(_prev: EmailFormState, formData: F
   );
   revalidatePath('/admin/settings');
   return { success: 'Email settings saved.' };
+}
+
+export interface ConnectionState {
+  checkedAt?: string;
+  result?: ConnectionCheck;
+  /** Links for fixing a missing permission, built from the saved tenant and client IDs. */
+  links?: { permissions: string; consent: string };
+  error?: string;
+}
+
+/** "Check connection": a fresh sign-in to Microsoft, reporting the app's granted permissions. */
+export async function checkConnectionAction(): Promise<ConnectionState> {
+  await requireSuperAdmin();
+  const settings = await getEmailSettings();
+  if (!isConfigured(settings)) return { error: 'Add and save the tenant ID, client ID, client secret and sender first.' };
+  const result = await checkConnection(settings);
+  const tenant = encodeURIComponent(settings.tenantId);
+  const client = encodeURIComponent(settings.clientId);
+  return {
+    checkedAt: new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/London' }),
+    result,
+    links: {
+      permissions: `https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/CallAnAPI/appId/${client}`,
+      consent: `https://login.microsoftonline.com/${tenant}/adminconsent?client_id=${client}`,
+    },
+  };
 }
 
 export async function sendTestEmailAction(_prev: EmailFormState, formData: FormData): Promise<EmailFormState> {

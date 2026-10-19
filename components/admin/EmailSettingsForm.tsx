@@ -1,8 +1,14 @@
 'use client';
 
 import { useActionState } from 'react';
-import { CheckCircle2, CircleAlert, Send } from 'lucide-react';
-import { saveEmailSettingsAction, sendTestEmailAction, type EmailFormState } from '@/lib/admin/email-actions';
+import { CheckCircle2, CircleAlert, RefreshCw, Send, XCircle } from 'lucide-react';
+import {
+  checkConnectionAction,
+  saveEmailSettingsAction,
+  sendTestEmailAction,
+  type ConnectionState,
+  type EmailFormState,
+} from '@/lib/admin/email-actions';
 import { EMAIL_ROUTES, type EmailRoute } from '@/lib/email/routes';
 import { inputClass } from './MediaInputs';
 
@@ -31,12 +37,77 @@ function Result({ state }: { state: EmailFormState }) {
   return null;
 }
 
+const Step = ({ ok, children }: { ok: boolean; children: React.ReactNode }) => (
+  <li className="flex gap-2">
+    {ok ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-700" aria-hidden="true" /> : <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" aria-hidden="true" />}
+    <span>{children}</span>
+  </li>
+);
+
+/** What "Check connection" found, with the fix when the permission is missing. */
+function ConnectionResult({ state }: { state: ConnectionState }) {
+  if (state.error) return <p role="alert" className="text-sm font-semibold text-red-600">{state.error}</p>;
+  const r = state.result;
+  if (!r) return null;
+  const link = 'font-semibold text-brand-orange underline';
+  return (
+    <div role="status" className="space-y-3 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm">
+      <p className="text-xs text-neutral-500">Checked at {state.checkedAt}</p>
+      <ul className="space-y-1.5">
+        <Step ok={r.signedIn}>
+          {r.signedIn ? (
+            <>
+              Signed in to Microsoft as <strong>{r.appName ?? 'your app'}</strong>.
+            </>
+          ) : (
+            <>Sign-in failed: {r.error}</>
+          )}
+        </Step>
+        {r.signedIn && (
+          <Step ok={r.canSend}>
+            {r.canSend ? (
+              <>
+                Permission to send email (<strong>Mail.Send</strong>) is granted. Emails will send.
+              </>
+            ) : (
+              <>
+                <strong>Mail.Send is not granted yet</strong>, so Microsoft will refuse to send.{' '}
+                {r.roles.length ? `Granted permissions: ${r.roles.join(', ')}.` : 'The app has no application permissions at all.'}
+              </>
+            )}
+          </Step>
+        )}
+      </ul>
+      {r.signedIn && !r.canSend && state.links && (
+        <ol className="list-decimal space-y-1.5 pl-5">
+          <li>
+            Open the app’s{' '}
+            <a href={state.links.permissions} target="_blank" rel="noopener noreferrer" className={link}>
+              API permissions
+            </a>{' '}
+            and add <strong>Microsoft Graph → Application permissions → Mail.Send</strong> (not “Delegated”).
+          </li>
+          <li>
+            A <strong>Global Administrator</strong> or <strong>Privileged Role Administrator</strong> then clicks “Grant admin consent” there, or opens the{' '}
+            <a href={state.links.consent} target="_blank" rel="noopener noreferrer" className={link}>
+              admin consent link
+            </a>{' '}
+            and accepts. (A “redirect” error page afterwards is normal.)
+          </li>
+          <li>Come back and click Check connection again.</li>
+        </ol>
+      )}
+    </div>
+  );
+}
+
 /** "From the MICROSOFT_GRAPH_… environment variable" hint under a field. */
 const envNote = (on: boolean, name: string) => (on ? <span className={help}>Currently using the {name} environment variable. Fill this in to override it.</span> : null);
 
 export function EmailSettingsForm({ settings }: { settings: EmailSettingsView }) {
   const [state, action, pending] = useActionState<EmailFormState, FormData>(saveEmailSettingsAction, {});
   const [testState, testAction, testing] = useActionState<EmailFormState, FormData>(sendTestEmailAction, {});
+  const [checkState, checkAction, checking] = useActionState<ConnectionState, FormData>(checkConnectionAction, {});
 
   return (
     <div className="space-y-6">
@@ -139,6 +210,17 @@ export function EmailSettingsForm({ settings }: { settings: EmailSettingsView })
           </button>
           <Result state={state} />
         </div>
+      </form>
+
+      <form action={checkAction} className={card}>
+        <div>
+          <h2 className="text-lg font-bold">Check connection</h2>
+          <p className="text-sm text-neutral-500">Signs in to Microsoft with a fresh token and shows what the app is allowed to do. Use it after changing permissions in Microsoft.</p>
+        </div>
+        <button type="submit" disabled={checking || !settings.configured} className={submit}>
+          <RefreshCw className={`h-4 w-4 ${checking ? 'animate-spin' : ''}`} aria-hidden="true" /> {checking ? 'Checking…' : 'Check connection'}
+        </button>
+        <ConnectionResult state={checkState} />
       </form>
 
       <form action={testAction} className={card}>

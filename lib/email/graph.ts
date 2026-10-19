@@ -39,6 +39,33 @@ async function accessToken(s: EmailSettings): Promise<string> {
   return body.access_token;
 }
 
+export interface ConnectionCheck {
+  signedIn: boolean;
+  /** Microsoft's error when sign-in failed. */
+  error?: string;
+  /** The app Microsoft recognised, from the fresh token. */
+  appName?: string;
+  /** Application permissions actually granted, e.g. ["Mail.Send"]. */
+  roles: string[];
+  canSend: boolean;
+}
+
+/**
+ * Settings → Email "Check connection": signs in to Microsoft with a fresh
+ * token (dropping any cached one) and reports what the app is allowed to do.
+ */
+export async function checkConnection(s: EmailSettings): Promise<ConnectionCheck> {
+  cached = null;
+  try {
+    const token = await accessToken(s);
+    const claims = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString()) as { roles?: string[]; app_displayname?: string };
+    const roles = claims.roles ?? [];
+    return { signedIn: true, appName: claims.app_displayname, roles, canSend: roles.includes('Mail.Send') };
+  } catch (error) {
+    return { signedIn: false, error: error instanceof Error ? error.message : String(error), roles: [], canSend: false };
+  }
+}
+
 export interface OutgoingEmail {
   to: string[];
   subject: string;
@@ -47,7 +74,16 @@ export interface OutgoingEmail {
   replyTo?: { address: string; name?: string };
 }
 
-export async function sendGraphMail(s: EmailSettings, email: OutgoingEmail): Promise<void> {
+/** The app's application permissions, read from its token (e.g. ["Mail.Send"]). */
+const tokenRoles = (token: string): string[] => {
+  try {
+    return (JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString()) as { roles?: string[] }).roles ?? [];
+  } catch {
+    return [];
+  }
+};
+
+export async function sendGraphMail(s: EmailSettings, email: OutgoingEmail, retried = false): Promise<void> {
   const token = await accessToken(s);
   const res = await fetch(`https://graph.microsoft.com/v1.0/users/${encodeURIComponent(s.senderId)}/sendMail`, {
     method: 'POST',
@@ -65,6 +101,21 @@ export async function sendGraphMail(s: EmailSettings, email: OutgoingEmail): Pro
   });
   if (res.status !== 202) {
     const body = (await res.json().catch(() => ({}))) as { error?: { code?: string; message?: string } };
+    if (body.error?.code === 'ErrorAccessDenied') {
+      // A token fetched before permission was granted doesn't carry it: try once more with a fresh one.
+      if (!retried) {
+        cached = null;
+        return sendGraphMail(s, email, true);
+      }
+      if (!tokenRoles(token).includes('Mail.Send')) {
+        throw new Error(
+          'Microsoft refused to send because the app doesn’t have permission yet. In Microsoft Entra ID → App registrations → this app → API permissions, add Microsoft Graph → Application permissions → Mail.Send, then click “Grant admin consent”.'
+        );
+      }
+      throw new Error(
+        `Microsoft refused to send from ${s.senderId}. The app has Mail.Send, so check that this mailbox exists in your Microsoft 365 organisation, and that any application access policy allows the app to use it.`
+      );
+    }
     throw new Error(`Microsoft couldn’t send the email: ${body.error?.message ?? `HTTP ${res.status}`}${body.error?.code ? ` (${body.error.code})` : ''}`);
   }
 }

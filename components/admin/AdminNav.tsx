@@ -50,7 +50,7 @@ export function AdminNav({
   ];
 
   return (
-    <nav aria-label="Dashboard" className="flex h-full flex-col gap-1 p-4 text-sm">
+    <nav aria-label="Dashboard" className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-4 text-sm">
       {links.map(({ href, label, icon: Icon, exact, badge }: NavLink) => {
         const active = exact ? pathname === href : pathname.startsWith(href);
         const n = badge ? counts[badge] : 0;

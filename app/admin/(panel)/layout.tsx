@@ -26,7 +26,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      <aside className="shrink-0 bg-brand-ink md:sticky md:top-0 md:h-screen md:w-60">
+      <aside className="shrink-0 bg-brand-ink md:sticky md:top-0 md:flex md:h-screen md:w-60 md:flex-col">
         <Link href="/admin" className="block px-5 pt-5" aria-label="Dashboard home">
           <Image src="/logo.svg" width={281} height={135} alt="Muve Futures" className="h-auto w-32" />
         </Link>
