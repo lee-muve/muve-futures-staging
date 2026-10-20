@@ -73,9 +73,9 @@ export const SINGLES: { [K in SingleKey]: SingleDef<SingleTypes[K]> } = {
     description: 'Contact details, office address, social links and search engine text.',
     schema: settingsSchema,
     defaults: DEFAULT_SETTINGS,
-    path: '/home',
+    path: '/',
   },
-  home: { label: 'Home page', description: 'Every section of the home page.', schema: homeSchema, defaults: DEFAULT_HOME, path: '/home' },
+  home: { label: 'Home page', description: 'Every section of the home page.', schema: homeSchema, defaults: DEFAULT_HOME, path: '/' },
   about: { label: 'About page', description: 'Hero, why we exist, why choose us.', schema: aboutSchema, defaults: DEFAULT_ABOUT, path: '/about' },
   'services-page': {
     label: 'Services overview',
