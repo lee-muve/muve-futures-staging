@@ -17,11 +17,11 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      {
-        source: '/',
-        destination: '/coming-soon',
-        permanent: false,
-      },
+      // The site has launched: the home page is at /. The pre-launch preview address goes there for good.
+      { source: '/home', destination: '/', permanent: true },
+      // The coming-soon page is switched off. To bring it back, replace this with
+      // { source: '/', destination: '/coming-soon', permanent: false }.
+      { source: '/coming-soon', destination: '/', permanent: false },
     ];
   },
 };
