@@ -18,10 +18,11 @@ export function ResourcesAndCallToAction({
 }) {
   return (
     <>
-      <section id="resources-preview" className="relative overflow-hidden px-6 pt-12 pb-32 text-white lg:u-h-590 lg:p-0">
+      {/* Dark text: white doesn't stand out against the light blue photo. */}
+      <section id="resources-preview" className="relative overflow-hidden px-6 pt-12 pb-32 text-brand-ink lg:u-h-590 lg:p-0">
         <Image
-          src="/images/home/books.webp"
-          alt="Colourful open books standing on their edges against an orange background"
+          src="/images/home/books-blue.webp"
+          alt="Colourful open books standing on their edges against a light blue background"
           fill
           sizes="100vw"
           className="object-cover"
@@ -34,7 +35,11 @@ export function ResourcesAndCallToAction({
         </Reveal>
 
         <Reveal from="pop" delay={0.3} className="relative mt-6 lg:absolute lg:u-left-1218 lg:u-top-202 lg:mt-0">
-          <Button asChild variant="outline-white" className={cn(homeButton.outlineSm, 'lg:u-w-311')}>
+          <Button
+            asChild
+            variant="outline-white"
+            className={cn(homeButton.outlineSm, 'border-brand-ink text-brand-ink hover:bg-brand-ink hover:text-white lg:u-w-311')}
+          >
             <Link id="btn-visit-resources" href="/resources">
               {resources.cta}
             </Link>

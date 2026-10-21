@@ -132,7 +132,7 @@ export const DEFAULT_HOME: HomeContent = {
     eyebrow: 'Partnerships',
     title: 'Working Together\nAround Every Learner',
     body: 'Positive outcomes are achieved through collaboration. We work closely with schools, Local Authorities, commissioners, families and professionals to create joined-up education pathways that place the learner at the centre of every decision.',
-    cta: 'Book an Intro',
+    cta: 'Make a Referral',
   },
   referral: {
     eyebrow: 'Referral',
@@ -310,7 +310,7 @@ export const DEFAULT_FORMS: FormsContent = {
   feedbackClosing: {
     title: 'Let’s Support More\nLearners Together',
     body: 'Whether you need support for an individual learner or want to discuss longer-term provision, our team is here to help.',
-    cta: 'Book an Intro',
+    cta: 'Make a Referral',
   },
 };
 
@@ -376,7 +376,7 @@ export const DEFAULT_CONTACT_PAGE: ContactPageContent = {
   },
   getInTouch: { title: 'Get In Touch' },
   refer: { title: 'Ready to Refer?', body: 'Tell us about the learner and we’ll help find the right education pathway.', cta: 'Make a Referral' },
-  talk: { title: 'Prefer to talk first?', body: 'Book a short introduction with our team to talk things through.', cta: 'Book an Intro' },
+  talk: { title: 'Prefer to talk first?', body: 'Book a short introduction with our team to talk things through.', cta: 'Make a Referral' },
   where: {
     eyebrow: 'Where We Work',
     title: 'Supporting Learners Across The West Midlands',
@@ -538,7 +538,7 @@ export const DEFAULT_RESOURCES: ResourcesContent = {
   closing: {
     title: 'Let’s Build Better Futures Together',
     body: 'Whether you’re looking for Alternative Provision, exploring partnership opportunities or seeking advice about a learner, we’d love to hear from you.',
-    cta: 'Book an Intro',
+    cta: 'Make a Referral',
   },
 };
 

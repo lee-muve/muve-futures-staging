@@ -198,7 +198,7 @@ export const SERVICE_OFFERINGS: ServiceOffering[] = [
       closing: {
         title: 'Accessible Education Wherever Learning Happens.',
         body: 'Speak with our team to explore flexible online education pathways.',
-        cta: { label: 'Book an Intro', action: 'intro' },
+        cta: { label: 'Make a Referral', action: 'referral' },
       },
       placeholderCopy: true,
     },
@@ -292,7 +292,7 @@ export const SERVICE_OFFERINGS: ServiceOffering[] = [
       closing: {
         title: 'Successful Reintegration Starts With Good Planning',
         body: "Let's create a personalised reintegration pathway that supports lasting educational success.",
-        cta: { label: 'Book an Intro', action: 'intro' },
+        cta: { label: 'Make a Referral', action: 'referral' },
       },
     },
   },
@@ -337,7 +337,7 @@ export const SERVICE_OFFERINGS: ServiceOffering[] = [
       closing: {
         title: 'Every Successful Transition Begins With Preparation',
         body: "Let's work together to prepare the learner for a positive and successful future.",
-        cta: { label: 'Book an Intro', action: 'intro' },
+        cta: { label: 'Make a Referral', action: 'referral' },
       },
     },
   },
@@ -400,7 +400,7 @@ export const SERVICE_OFFERINGS: ServiceOffering[] = [
         title: 'Consistency Throughout The Year',
         intro:
           'Some learners benefit from consistent education and support throughout the year. Our 52 Week Provision provides continuity that helps maintain confidence, routine and meaningful educational progress.',
-        cta: { label: 'Book an Intro', action: 'intro' },
+        cta: { label: 'Make a Referral', action: 'referral' },
       },
       blocks: [
         {
@@ -587,7 +587,7 @@ export const SERVICE_OFFERINGS: ServiceOffering[] = [
       closing: {
         title: 'Every Step Forward Counts',
         body: "Let's talk about a gentle, personalised pathway back into education.",
-        cta: { label: 'Book an Intro', action: 'intro' },
+        cta: { label: 'Make a Referral', action: 'referral' },
       },
       placeholderCopy: true,
     },

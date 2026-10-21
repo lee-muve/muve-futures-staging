@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { FrameworkStage } from '@/app/types';
 import { Button } from '@/components/ui/button';
-import { BookIntroButton, ReferralButton } from '@/components/common/ActionButtons';
+import { ReferralButton } from '@/components/common/ActionButtons';
 import { homeButton, homeType } from '@/components/home/homeStyles';
 import { AnimatePresence, motion } from 'motion/react';
 import { cn } from '@/lib/utils';
@@ -130,13 +130,13 @@ export function FourStageApproach({
           <p className={cn('mt-2 hidden text-xs leading-[1.35] sm:block sm:text-sm lg:u-mt-60 lg:u-w-840 lg:u-text-24')}>
             {partnerships.body}
           </p>
-          <BookIntroButton
-            id="btn-book-intro"
+          <ReferralButton
+            id="btn-referral-partnerships"
             variant="outline"
             className={cn(homeButton.outlineSm, inkOutline, 'mt-3 h-8 text-xs lg:u-mt-50 lg:u-w-249')}
           >
             {partnerships.cta}
-          </BookIntroButton>
+          </ReferralButton>
         </div>
       </Reveal>
 

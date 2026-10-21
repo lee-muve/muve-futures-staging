@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { ResourcesHero } from '@/components/resources/ResourcesHero';
 import { ResourceLibrary } from '@/components/resources/ResourceLibrary';
-import { BookIntroButton } from '@/components/common/ActionButtons';
+import { ReferralButton } from '@/components/common/ActionButtons';
 import { Lines } from '@/components/common/Lines';
 import { Reveal } from '@/components/motion/Reveal';
 import { getCollection, getSingle } from '@/lib/content/queries';
@@ -42,7 +42,7 @@ export default async function ResourcesPage() {
           <Lines text={closing.title} />
         </h2>
         <p className="mx-auto mt-6 max-w-3xl text-sm leading-relaxed sm:text-lg">{closing.body}</p>
-        <BookIntroButton className="mt-8 text-base">{closing.cta}</BookIntroButton>
+        <ReferralButton className="mt-8 text-base">{closing.cta}</ReferralButton>
       </Reveal>
     </div>
   );
