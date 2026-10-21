@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BOOK_INTRO_HREF, REFERRAL_HREF } from '@/constants';
+import { REFERRAL_HREF } from '@/constants';
 import type { ContactPageContent, SettingsContent } from '@/lib/content/pages';
 import { cn } from '@/lib/utils';
 
@@ -59,7 +59,7 @@ export function ContactCards({ content, settings }: { content: ContactPageConten
       <div className="rounded-tr-[3rem] bg-brand-pink px-7 py-8 text-white lg:u-rounded-tr-90 lg:u-px-45 lg:u-pt-45 lg:u-pb-40">
         <h2 className={cardTitle}>{content.talk.title}</h2>
         <p className={cn('mt-2 lg:u-mt-14', small)}>{content.talk.body}</p>
-        <Link href={BOOK_INTRO_HREF} className={cn(button, 'mt-5 bg-white text-brand-ink hover:bg-neutral-100 lg:u-mt-24')}>
+        <Link href={REFERRAL_HREF} className={cn(button, 'mt-5 bg-white text-brand-ink hover:bg-neutral-100 lg:u-mt-24')}>
           {content.talk.cta}
         </Link>
       </div>

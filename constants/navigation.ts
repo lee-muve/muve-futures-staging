@@ -73,7 +73,7 @@ export const NAV_LINKS_CONFIG: NavLinkConfig[] = [
   },
   {
     id: 'who-we-support',
-    label: 'Who We Support',
+    label: 'Schools + MATs',
     href: '/who-we-support',
     dropdown: [
       { label: 'Schools', href: '/who-we-support/schools' },

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { BookIntroButton } from '@/components/common/ActionButtons';
+import { ReferralButton } from '@/components/common/ActionButtons';
 import { Lines } from '@/components/common/Lines';
 import { DesignFormPage } from '@/components/forms/DesignFormPage';
 import { FeedbackForm } from '@/components/forms/FeedbackForm';
@@ -32,7 +32,7 @@ export default async function FeedbackPage() {
               <p className="mx-auto mt-6 max-w-xl text-sm leading-[1.3] sm:text-lg lg:max-w-none lg:u-mt-48 lg:u-w-740 lg:u-text-24">{closing.body}</p>
             </Reveal>
             <Reveal from="pop" delay={0.2} className="mt-8 lg:u-mt-49">
-              <BookIntroButton className="text-base lg:py-0 lg:u-h-48 lg:u-w-268 lg:u-text-25">{closing.cta}</BookIntroButton>
+              <ReferralButton className="text-base lg:py-0 lg:u-h-48 lg:u-w-268 lg:u-text-25">{closing.cta}</ReferralButton>
             </Reveal>
           </div>
         </section>

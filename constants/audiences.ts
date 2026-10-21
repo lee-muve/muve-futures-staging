@@ -123,7 +123,7 @@ export const AUDIENCES: Audience[] = [
       closing: {
         title: "Let's Support More Learners Together",
         body: 'Whether you need support for an individual learner or want to discuss longer-term provision, our team is here to help.',
-        cta: { label: 'Book an Intro', action: 'intro' },
+        cta: { label: 'Make a Referral', action: 'referral' },
       },
       placeholderCopy: true,
     },
@@ -174,7 +174,7 @@ export const AUDIENCES: Audience[] = [
       closing: {
         title: "Let's Discuss Local Education Capacity",
         body: 'Speak with our team about referrals, commissioning opportunities or expanding local education provision.',
-        cta: { label: 'Book an Intro', action: 'intro' },
+        cta: { label: 'Make a Referral', action: 'referral' },
       },
     },
   },
@@ -235,7 +235,7 @@ export const AUDIENCES: Audience[] = [
         title: 'Supporting Children In Care Through Personalised Education',
         intro:
           'Children and young people in care deserve education that understands their experiences while creating opportunities for future success. MUVE Futures partners with Virtual Schools to provide flexible education that builds confidence, engagement and long-term outcomes.',
-        cta: { label: 'Book an Intro', action: 'intro' },
+        cta: { label: 'Make a Referral', action: 'referral' },
       },
       blocks: [
         {
@@ -282,7 +282,7 @@ export const AUDIENCES: Audience[] = [
         title: 'Bringing Education And Care Together',
         intro:
           "Education is most effective when it reflects the young person's wider support needs and daily experiences.",
-        cta: { label: 'Book an Intro', action: 'intro' },
+        cta: { label: 'Make a Referral', action: 'referral' },
       },
       blocks: [
         {
@@ -327,7 +327,7 @@ export const AUDIENCES: Audience[] = [
         title: 'Combining Expertise Around The Learner',
         intro:
           'We work alongside SENCOs, Educational Psychologists, Occupational Therapists, Speech and Language Therapists, Behaviour Specialists and other SEND professionals.',
-        cta: { label: 'Book an Intro', action: 'intro' },
+        cta: { label: 'Make a Referral', action: 'referral' },
       },
       blocks: [
         {

@@ -14,7 +14,8 @@ const body = (label = 'Text') => textarea(label, { rows: 4 });
 const cta: Field = object(
   {
     label: text('Button label'),
-    action: select('What the button does', { referral: 'Open the referral form', intro: 'Open “Book an intro”', contact: 'Go to the contact page' }),
+    // "intro" is kept so older saved buttons still validate; it now opens the referral form too (components/detail/CtaButton.tsx).
+    action: select('What the button does', { referral: 'Open the referral form', intro: 'Open the referral form (was “Book an intro”)', contact: 'Go to the contact page' }),
   },
   'Button'
 );
