@@ -105,6 +105,36 @@
   }
 }
 
+/*
+ * MyNewTerm widget (components/careers/MyNewTermJobs.tsx): their "Extras"
+ * style code, with brand colours in place of their default orange. Buttons
+ * orange, job titles teal like the site's own careers list, icons green.
+ */
+html a.orange-btn-hover,
+html span.orange-btn-hover {
+  background-color: #F05B25 !important;
+  color: #ffffff !important;
+}
+html a.orange-btn-hover:hover {
+  background-color: #d94e20 !important;
+  border-color: #F05B25 !important;
+}
+html a.orange-link-wrapper .orange-vacancy-title {
+  color: #024553 !important;
+}
+html a.orange-link-wrapper .orange-vacancy-icon {
+  color: #A5CD39 !important;
+}
+html .orange-vacancy-link {
+  color: #F05B25 !important;
+}
+html .orange-vacancy-div-bg {
+  background-color: #F05B25 !important;
+}
+.mnt-widget {
+  font-family: inherit;
+}
+
 @layer base {
   :root {
     /* One design pixel (see the u-* utilities above). */

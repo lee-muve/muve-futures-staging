@@ -1,11 +1,34 @@
 import 'server-only';
+import { eq } from 'drizzle-orm';
+import { db, hasDatabase, schema } from '@/lib/db';
 import type { ListedVacancy } from '@/lib/careers/shared';
 
 /*
  * Vacancies from SeeMeHired, the group's applicant tracking system. Their
  * public jobs feed is plain JSON (no key needed); people apply on the job's
  * SeeMeHired page.
+ *
+ * Super admins switch the feed on or off in Settings → Job feeds (stored in
+ * app_settings as `seemehired`). It's off unless switched on.
  */
+
+const SETTINGS_KEY = 'seemehired';
+
+/** Whether the SeeMeHired feed is switched on in the dashboard. */
+export async function isSeeMeHiredEnabled(): Promise<boolean> {
+  if (!hasDatabase) return false;
+  const [row] = await db().select({ value: schema.appSettings.value }).from(schema.appSettings).where(eq(schema.appSettings.key, SETTINGS_KEY));
+  return (row?.value as { enabled?: boolean } | undefined)?.enabled === true;
+}
+
+export async function setSeeMeHiredEnabled(enabled: boolean, adminId: string) {
+  const value = { enabled };
+  const now = new Date();
+  await db()
+    .insert(schema.appSettings)
+    .values({ key: SETTINGS_KEY, value, updatedAt: now, updatedBy: adminId })
+    .onConflictDoUpdate({ target: schema.appSettings.key, set: { value, updatedAt: now, updatedBy: adminId } });
+}
 
 const FEED = 'https://api.seemehired.com/public/jobs/embed?companyId=384&fullTime=1&partTime=1';
 const jobUrl = (id: number) => `https://seemehired.com/jobs/${id}`;
@@ -45,9 +68,11 @@ function toVacancy(job: SmhJob, index: number): ListedVacancy | null {
   };
 }
 
-/** Live jobs on SeeMeHired, refreshed every 10 minutes. Empty if the feed can't be reached. */
+/** Live jobs on SeeMeHired, refreshed every 10 minutes. Empty if the feed is switched off or can't be reached. */
 export async function getSeeMeHiredVacancies(): Promise<ListedVacancy[]> {
   try {
+    // Switched off: don't contact SeeMeHired at all.
+    if (!(await isSeeMeHiredEnabled())) return [];
     const res = await fetch(FEED, { next: { revalidate: 600 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const { items } = (await res.json()) as { items?: SmhJob[] };
