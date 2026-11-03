@@ -4,6 +4,8 @@ import { ChatForm } from '@/components/contact/ChatForm';
 import { ContactCards, WhereWeWork } from '@/components/contact/ContactCards';
 import { Lines } from '@/components/common/Lines';
 import { Reveal, Stagger, StaggerItem } from '@/components/motion/Reveal';
+import { MyNewTermJobs } from '@/components/careers/MyNewTermJobs';
+import { getMyNewTermWidgetKey } from '@/lib/careers/mynewterm';
 import { getSeeMeHiredVacancies } from '@/lib/careers/seemehired';
 import { renderTime } from '@/lib/careers/shared';
 import { getCollection, getSingle } from '@/lib/content/queries';
@@ -18,12 +20,13 @@ export const revalidate = 600;
 
 /** Contact and careers, from public/design. From lg up, sizes are design pixels (u-* units). */
 export default async function ContactPage() {
-  const [{ contact: hero }, content, settings, vacancies, seemehired] = await Promise.all([
+  const [{ contact: hero }, content, settings, vacancies, seemehired, mntKey] = await Promise.all([
     getSingle('forms'),
     getSingle('contact-page'),
     getSingle('settings'),
     getCollection('vacancy'),
     getSeeMeHiredVacancies(),
+    getMyNewTermWidgetKey(),
   ]);
 
   return (
@@ -60,7 +63,17 @@ export default async function ContactPage() {
         <WhereWeWork content={content.where} />
       </Reveal>
 
-      <Careers content={content.careers} vacancies={[...vacancies, ...seemehired]} renderedAt={renderTime()} />
+      {/* With MyNewTerm on and nothing else live, its widget is the list (no "no open roles" message above it). */}
+      {(vacancies.length > 0 || seemehired.length > 0 || !mntKey) && (
+        <Careers content={content.careers} vacancies={[...vacancies, ...seemehired]} renderedAt={renderTime()} />
+      )}
+      {mntKey && (
+        <MyNewTermJobs
+          apiKey={mntKey}
+          title={vacancies.length > 0 || seemehired.length > 0 ? 'More Vacancies' : content.careers.title}
+          intro="Live roles advertised on MyNewTerm. Choose a role to read the full details and apply."
+        />
+      )}
     </div>
   );
 }
